@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onStart() {
                         // Change Content Title to Loading... when process start
-                        judulHasil.setText(R.string.lading);
+                        // judulHasil.setText(R.string.lading);
                         pgDialog.setMessage("Mohon tunggu...");
                         pgDialog.show();
                     }
@@ -116,10 +116,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 judulHasil.setText("Tagihan untuk bulan "+data.getNamathblrek());
-                                contentHasil.setText("Nominal : Rp."+data.getTagihan()+"\nNama: "+data.getNama());
+                                contentHasil.setText("Nominal : Rp."+data.getTagihan()+"\nNama: "+data.getNama()+"\nTerbilang: "+data.getTerbilang());
 
 
                                 Log.d("DataDebug","Data : "+data.getTerbilang());
+                            }else{
+                                judulHasil.setText("API Call Failed");
+                                contentHasil.setText("Make sure you have internet connection and try again later");
                             }
                         }catch (Exception e){
                             e.printStackTrace();
