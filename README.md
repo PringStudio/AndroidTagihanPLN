@@ -3,7 +3,7 @@
 Aplikasi android untuk menampilkan tagihan PLN Pasca Bayar menggunakan API dari
 [api.ibacor.com](http://ibacor.com/api#bcr-tagihan-pln)
 
-[Screenshot](https://raw.githubusercontent.com/PringStudio/AndroidTagihanPLN/master/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/PringStudio/AndroidTagihanPLN/master/screenshot.png ""Screenshot"")
 
 # Libraries
 
