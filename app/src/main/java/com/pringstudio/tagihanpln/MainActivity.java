@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -105,19 +107,40 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         Log.d("onSuccess", "onSuccess: "+response.toString());
-                        try{
-                            String textBulan = response.getJSONObject("data").getString("namathblrek");
-                            String nominal = response.getJSONObject("data").getString("tagihan");
-                            judulHasil.setText("Tagihan untuk bulan "+textBulan);
-                            contentHasil.setText("Nominal yang harus dibayar : Rp."+nominal);
+
+                        try {
+                            String status = response.getString("status");
+                            if (status.equals("success")){
+                                Gson gson = new GsonBuilder().create();
+                                Data data = gson.fromJson(response.getJSONObject("data").toString(), Data.class);
+
+
+                                judulHasil.setText("Tagihan untuk bulan "+data.getNamathblrek());
+                                contentHasil.setText("Nominal : Rp."+data.getTagihan()+"\nNama: "+data.getNama());
+
+
+                                Log.d("DataDebug","Data : "+data.getTerbilang());
+                            }
                         }catch (Exception e){
                             e.printStackTrace();
                         }
+
+
+
+//                        try{
+//                            String textBulan = response.getJSONObject("data").getString("namathblrek");
+//                            String nominal = response.getJSONObject("data").getString("tagihan");
+//                            judulHasil.setText("Tagihan untuk bulan "+textBulan);
+//                            contentHasil.setText("Nominal yang harus dibayar : Rp."+nominal);
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
                         pgDialog.hide();
                     }
 
+
                     @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         Log.d("onFailure","Request Gagal "+throwable.getMessage());
                         pgDialog.hide();
                     }
