@@ -12,8 +12,36 @@
     tools:context="com.pringstudio.tagihanpln.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <EditText
+        android:id="@+id/input_idpel"
+        android:layout_width="match_parent"
+        android:inputType="number"
+        android:hint="@string/hint_id_pelanggan"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/tombol_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/input_idpel"
+        android:text="@string/check_tagihan" />
+
+    <TextView
+        android:id="@+id/judul_hasil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tombol_check"
+        android:layout_marginTop="6dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/content_hasil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/judul_hasil" />
+
+
 </RelativeLayout>
