@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="check_tagihan">Check Tagihan</string>
     <string name="hint_id_pelanggan">ID Pelanggan</string>
+    <string name="bulan">Bulan</string>
+    <string name="tahun">Tahun</string>
+    <string name="lading">Loading...</string>
 </resources>

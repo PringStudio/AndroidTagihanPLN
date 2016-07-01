@@ -1,5 +1,6 @@
 package com.pringstudio.tagihanpln;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -25,6 +27,13 @@ public class MainActivity extends AppCompatActivity {
     // UI Component
     Button btnCheck;
     EditText inputIDPel;
+    EditText inputBulan;
+    EditText inputTahun;
+    TextView judulHasil;
+    TextView contentHasil;
+
+    // Progress Dialog
+    ProgressDialog pgDialog;
 
     // HTTP Client
     AsyncHttpClient client;
@@ -39,9 +48,18 @@ public class MainActivity extends AppCompatActivity {
         // Get From XML
         btnCheck = (Button) findViewById(R.id.tombol_check);
         inputIDPel = (EditText) findViewById(R.id.input_idpel);
+        inputBulan = (EditText) findViewById(R.id.input_bulan);
+        inputTahun = (EditText) findViewById(R.id.input_tahun);
+        judulHasil = (TextView) findViewById(R.id.judul_hasil);
+        contentHasil = (TextView) findViewById(R.id.content_hasil);
 
         // Init HTTP Client
         client = new AsyncHttpClient();
+
+        // Init Progress Dialog
+        pgDialog = new ProgressDialog(this);
+        pgDialog.setIndeterminate(true);
+        pgDialog.setCancelable(false);
 
         // Add Listener
         btnCheck.setOnClickListener(new View.OnClickListener() {
@@ -50,21 +68,58 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get Content Value
                 String idpel = inputIDPel.getText().toString();
+                String bulan = inputBulan.getText().toString();
+                String tahun = inputTahun.getText().toString();
+
+                // Validation
+                if(idpel.length() != 12){
+                    Toast.makeText(getApplicationContext(),"Masukkan data ID Pelanggan dengan benar\n12 Digit",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(bulan.length() != 2){
+                    Toast.makeText(getApplicationContext(),"Masukkan bulan dengan benar\n 2 Digit",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(tahun.length() != 4){
+                    Toast.makeText(getApplicationContext(),"Masukkan tahun dengan benar\n4 Digit",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
 
                 // Make Api Request
                 // GET http://ibacor.com/api/tagihan-pln?idp=...&thn=...&bln=..
-                String apiUrl = "http://ibacor.com/api/tagihan-pln?idp=515040969459&thn=2016&bln=06";
+                String apiUrl = "http://ibacor.com/api/tagihan-pln?idp="+idpel+"&thn="+tahun+"&bln="+bulan;
                 client.get(apiUrl, new JsonHttpResponseHandler(){
+
+                    @Override
+                    public void onStart() {
+                        // Change Content Title to Loading... when process start
+                        judulHasil.setText(R.string.lading);
+                        pgDialog.setMessage("Mohon tunggu...");
+                        pgDialog.show();
+                    }
+
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        // Will Return Message on Debug Logcat
-                        // D/onSuccess: Resp: {"status":"success","query":{"id_pelanggan":"515040969459","tahun":"2016","bulan":"06"},"data":{"diskon":"0","angsuran":"ppn","thblrek":"201606","lwbp":"119825","beban":"18000","ketlunas":"08 Juni 2016","fakmkvam":"fakm","bpju":"13783","ptl":"137825","idpel":"515040969459","sahlwbp":"80051000","tglbacalalu":"22-04-2016","slawbp":"sewa","nama":"TOMO    ","namaupi":"JAWA TIMUR","daya":"900","fjn":"N","jamnyala":"mat","slalwbp":"77498000","pemkwh":"255","tagihan":"151608","namathblrek":"Juni 2016","terbilang":"Seratus Lima Puluh Satu Ribu Enam Ratus Delapan Rupiah ","wbp":"kvarh","alamat":"DS SIRIGAN No.0 RT.006 RW.01 SIRIGAN ","tglbacaakhir":"23-05-2016","tarif":"R1"}}
-                        Log.d("onSuccess","Resp: "+response.toString());
+                        Log.d("onSuccess", "onSuccess: "+response.toString());
+                        try{
+                            String textBulan = response.getJSONObject("data").getString("namathblrek");
+                            String nominal = response.getJSONObject("data").getString("tagihan");
+                            judulHasil.setText("Tagihan untuk bulan "+textBulan);
+                            contentHasil.setText("Nominal yang harus dibayar : Rp."+nominal);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        pgDialog.hide();
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Log.d("onFailure","Request Gagal "+throwable.getMessage());
+                        pgDialog.hide();
                     }
                 });
 

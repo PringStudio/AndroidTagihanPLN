@@ -13,11 +13,34 @@
     tools:showIn="@layout/activity_main">
 
     <EditText
+        android:text="515040969459"
         android:id="@+id/input_idpel"
         android:layout_width="match_parent"
-        android:inputType="number"
+        android:layout_height="wrap_content"
         android:hint="@string/hint_id_pelanggan"
-        android:layout_height="wrap_content" />
+        android:inputType="number" />
+
+    <EditText
+        android:text="06"
+        android:id="@+id/input_bulan"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_idpel"
+        android:hint="@string/bulan"
+        android:inputType="number"
+        android:maxLength="2" />
+
+    <EditText
+        android:text="2016"
+        android:id="@+id/input_tahun"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_idpel"
+        android:layout_toEndOf="@+id/input_bulan"
+        android:layout_toRightOf="@+id/input_bulan"
+        android:hint="@string/tahun"
+        android:inputType="number"
+        android:maxLength="4" />
 
     <Button
         android:id="@+id/tombol_check"
@@ -25,15 +48,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/input_idpel"
+        android:layout_below="@+id/input_tahun"
         android:text="@string/check_tagihan" />
 
     <TextView
         android:id="@+id/judul_hasil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/tombol_check"
-        android:layout_marginTop="6dp"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -41,6 +65,8 @@
         android:id="@+id/content_hasil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/judul_hasil" />
 
 
